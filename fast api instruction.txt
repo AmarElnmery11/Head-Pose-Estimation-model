@@ -1,0 +1,85 @@
+إنشاء بيئة العمل وتفعيلها:
+
+python -m venv venv
+
+.\venv\Scripts\activate
+
+تثبيت الحزم:
+
+pip install "fastapi[all]"
+
+تشغيل التطبيق:
+
+uvicorn main:app --reload
+==================================================== docker ===================================
+pip freeze > requirements.txt # مش شغاله وبعملها بايدى
+---------------------------------
+
+امسح امه من التيرمينال
+docker container prune
+ثم تمسحه من ال docker
+
+
+-------------------- colab ارجع اللى اتحفظ ------------------
+import joblib
+import pandas as pd
+from sklearn.metrics import classification_report
+
+# --- الخطوة 1: تحميل النموذج والبيانات المحفوظة ---
+# تأكد من رفع هذه الملفات الثلاثة إلى Colab أولاً:
+# 1. final_classification_model.joblib
+# 2. X_test_data.csv
+# 3. y_test_data.csv
+# 4. model_columns.joblib
+
+try:
+    # تحميل النموذج
+    loaded_model = joblib.load('final_classification_model.joblib')
+    print("تم تحميل النموذج بنجاح.")
+
+    # تحميل بيانات الاختبار
+    X_test_loaded = pd.read_csv('X_test_data.csv')
+    y_test_loaded = pd.read_csv('y_test_data.csv')
+    
+    # تحميل أسماء الأعمدة
+    model_columns = joblib.load('model_columns.joblib')
+    print("تم تحميل بيانات الاختبار وأسماء الأعمدة بنجاح.")
+
+except FileNotFoundError:
+    print("خطأ: واحد أو أكثر من الملفات المطلوبة غير موجود. يرجى التأكد من رفعها جميعاً.")
+except Exception as e:
+    print(f"حدث خطأ: {e}")
+
+
+# --- الخطوة 2: استخدام النموذج المحمل للتنبؤ ---
+# (لا يوجد أي تدريب هنا، فقط استخدام مباشر)
+
+if 'loaded_model' in locals():
+    # التأكد من أن الأعمدة بنفس الترتيب الذي تدرب عليه النموذج
+    X_test_aligned = X_test_loaded.reindex(columns=model_columns, fill_value=0)
+
+    # التنبؤ باستخدام النموذج المحمل
+    y_pred_loaded = loaded_model.predict(X_test_aligned)
+
+    # عرض تقرير الأداء للتأكد من أن كل شيء يعمل كما هو متوقع
+    print("\n--- تقرير الأداء باستخدام النموذج المحمل ---")
+    print(classification_report(y_test_loaded, y_pred_loaded, target_names=['No Upgrade (0)', 'Upgrade (1)']))
+
+============================================= chainlit============================================== in terminal====
+.venv\Scripts\activate
+
+pip install chainlit
+
+pip install fastmcp
+
+pip install langchain
+
+pip install langchain_mcp
+
+pip uninstall -y grpcio grpcio-tools
+
+pip install grpcio==1.65.1 grpcio-tools==1.65.1
+
+#مهممممم
+pip install opentelemetry-exporter-otlp-proto-grpc
+
